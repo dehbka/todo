@@ -16,6 +16,46 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    // Vue 3 + Vuetify via importmap (no bundler)
+    'vue' => [
+        // Use the ESM browser build that includes the template compiler
+        'package_specifier' => 'vue/dist/vue.esm-browser.js',
+        'version' => '3.4.38',
+    ],
+    // Vue internal packages required by ESM runtime & template compiler
+    '@vue/runtime-dom' => [
+        'version' => '3.4.38',
+    ],
+    '@vue/runtime-core' => [
+        'version' => '3.4.38',
+    ],
+    '@vue/reactivity' => [
+        'version' => '3.4.38',
+    ],
+    '@vue/shared' => [
+        'version' => '3.4.38',
+    ],
+    // If using inline templates (Vue compiles templates in the browser)
+    '@vue/compiler-dom' => [
+        'version' => '3.4.38',
+    ],
+    '@vue/compiler-core' => [
+        'version' => '3.4.38',
+    ],
+    'vuetify' => [
+        'version' => '3.7.1',
+    ],
+    // Vuetify component and directive entrypoints (required to register components)
+    'vuetify/components' => [
+        'version' => '3.7.1',
+    ],
+    'vuetify/directives' => [
+        'version' => '3.7.1',
+    ],
+    'todo-app' => [
+        'path' => './assets/todo-app/app.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],

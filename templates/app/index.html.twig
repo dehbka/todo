@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Todo App{% endblock %}
+
+{% block body %}
+  <div style="max-width: 720px; margin: 2rem auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
+    <div id="todo-root"></div>
+  </div>
+{% endblock %}
+
+{% block stylesheets %}
+  {# Vuetify CSS and icon fonts #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.1/dist/vuetify.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block importmap %}
+  {{ importmap(['app', 'todo-app']) }}
+{% endblock %}
+
+{# Explicitly import the todo-app entrypoint to ensure it executes #}
+{% block javascripts %}
+  {{ parent() }}
+  <script type="module">import 'todo-app';</script>
+{% endblock %}
