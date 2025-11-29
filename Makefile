@@ -19,6 +19,22 @@ sh:
 migrate:
 	$(DC) exec app php bin/console doctrine:migrations:migrate -n
 
+# composer-assets - install composer dependencies inside the PHP app container
+composer-install:
+	$(DC) exec app composer install
+
+# install-assets - install assets inside the PHP app container
+install-assets:
+	$(DC) exec app php bin/console importmap:install
+	$(DC) exec app php bin/console asset-map:compile
+
 # test - run phpunit test suite
 test:
 	./vendor/bin/phpunit
+
+# setup
+setup:
+	make up
+	make composer-install
+	make migrate
+	make install-assets
