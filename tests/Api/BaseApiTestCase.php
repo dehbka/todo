@@ -34,7 +34,7 @@ abstract class BaseApiTestCase extends WebTestCase
         $em = $this->em();
         $metadata = $em->getMetadataFactory()->getAllMetadata();
 
-        if ($metadata === []) {
+        if ([] === $metadata) {
             return;
         }
 
@@ -46,6 +46,7 @@ abstract class BaseApiTestCase extends WebTestCase
 
     /**
      * Convenience to decode JSON responses.
+     *
      * @return array<mixed>
      */
     protected function json(): array
@@ -53,7 +54,7 @@ abstract class BaseApiTestCase extends WebTestCase
         $content = $this->client->getResponse()->getContent();
         self::assertNotFalse($content, 'Expected a response body');
         /** @var array<mixed> $data */
-        $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
 
         return $data;
     }

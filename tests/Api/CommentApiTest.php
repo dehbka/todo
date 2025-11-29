@@ -13,6 +13,7 @@ final class CommentApiTest extends BaseApiTestCase
     {
         $this->client->jsonRequest('POST', '/todos', ['title' => $title]);
         self::assertResponseStatusCodeSame(201);
+
         return $this->json()['id'];
     }
 

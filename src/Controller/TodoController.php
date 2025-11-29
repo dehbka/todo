@@ -102,6 +102,4 @@ final class TodoController extends AbstractController
 
         return $this->json(array_map(fn (Comment $c) => CommentDto::fromEntity($c)->toArray(), $comments));
     }
-
-
 }
