@@ -34,16 +34,14 @@ abstract class BaseApiTestCase extends WebTestCase
         $em = $this->em();
         $metadata = $em->getMetadataFactory()->getAllMetadata();
 
+        if ($metadata === []) {
+            return;
+        }
+
         $tool = new SchemaTool($em);
         // Drop and recreate schema to ensure isolation
-        try {
-            $tool->dropSchema($metadata);
-        } catch (\Throwable) {
-            // ignore
-        }
-        if ($metadata !== []) {
-            $tool->createSchema($metadata);
-        }
+        $tool->dropSchema($metadata);
+        $tool->createSchema($metadata);
     }
 
     /**
