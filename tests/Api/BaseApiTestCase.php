@@ -39,8 +39,8 @@ abstract class BaseApiTestCase extends WebTestCase
         }
 
         $tool = new SchemaTool($em);
-        // Drop and recreate schema to ensure isolation
-        $tool->dropSchema($metadata);
+        // Drop all tables and recreate schema to ensure isolation
+        $tool->dropDatabase();
         $tool->createSchema($metadata);
     }
 
