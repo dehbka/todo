@@ -1,0 +1,156 @@
+open_spec: 1.0
+title: Todo + Comments Service Specification
+
+models:
+  Todo:
+    description: A task item that can have many comments.
+    fields:
+      id:
+        type: string
+        description: Unique identifier of the Todo
+        generated: true
+      title:
+        type: string
+        required: true
+        minLength: 1
+        maxLength: 200
+      status:
+        type: string
+        enum: [open, in_progress, done]
+        default: open
+      createdAt:
+        type: date-time
+        generated: true
+      updatedAt:
+        type: date-time
+        generated: true
+  Comment:
+    description: A user comment linked to a Todo.
+    fields:
+      id:
+        type: string
+        generated: true
+      todoId:
+        type: string
+        required: true
+        relation:
+          model: Todo
+          type: many-to-one
+      message:
+        type: string
+        required: true
+        minLength: 1
+        maxLength: 2000
+      createdAt:
+        type: date-time
+        generated: true
+
+validation:
+  - model: Todo
+    rules:
+      - field: title
+        rule: required
+      - field: title
+        rule: length
+        params: {min: 1, max: 200}
+      - field: status
+        rule: in
+        params: {values: [open, in_progress, done]}
+  - model: Comment
+    rules:
+      - field: todoId
+        rule: required
+      - field: message
+        rule: required
+      - field: message
+        rule: length
+        params: {min: 1, max: 2000}
+
+business_rules:
+  - id: BR-001
+    text: Comments can only be added to Todos that are not in status "done".
+    on_violation:
+      http_status: 409
+      error_code: todo.comment.forbidden_on_done
+      message: Cannot add a comment to a completed Todo.
+
+errors:
+  structure:
+    type: object
+    fields:
+      code: {type: string}
+      message: {type: string}
+      details: {type: object, optional: true}
+  common:
+    not_found:
+      http_status: 404
+      code: resource.not_found
+      message: Resource not found
+    validation_failed:
+      http_status: 422
+      code: validation.failed
+      message: Validation failed
+
+operations:
+  - id: createTodo
+    method: POST
+    path: /todos
+    request:
+      body:
+        type: object
+        fields:
+          title: {type: string, required: true}
+    responses:
+      201: {model: Todo}
+      422: {error: validation_failed}
+  - id: listTodos
+    method: GET
+    path: /todos
+    responses:
+      200:
+        type: array
+        items: {model: Todo}
+  - id: getTodo
+    method: GET
+    path: /todos/{id}
+    responses:
+      200: {model: Todo}
+      404: {error: not_found}
+  - id: updateTodo
+    method: PATCH
+    path: /todos/{id}
+    request:
+      body:
+        type: object
+        fields:
+          title: {type: string}
+          status: {type: string, enum: [open, in_progress, done]}
+    responses:
+      200: {model: Todo}
+      404: {error: not_found}
+      422: {error: validation_failed}
+  - id: createComment
+    method: POST
+    path: /todos/{id}/comments
+    request:
+      body:
+        type: object
+        fields:
+          message: {type: string, required: true}
+    responses:
+      201: {model: Comment}
+      404: {error: not_found}
+      409:
+        error:
+          http_status: 409
+          code: todo.comment.forbidden_on_done
+          message: Cannot add a comment to a completed Todo.
+      422: {error: validation_failed}
+  - id: listComments
+    method: GET
+    path: /todos/{id}/comments
+    responses:
+      200:
+        type: array
+        items: {model: Comment}
+      404: {error: not_found}
