@@ -1,0 +1,29 @@
+@baseUrl = http://localhost:8080
+@todoId = 9a72c29c-ab44-4f03-8e09-c356dbccefe7
+
+### List Todos
+GET {{baseUrl}}/todos
+Accept: application/json
+
+### Create a Todo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Buy milk"
+}
+
+### Get a Todo by id
+GET {{baseUrl}}/todos/{{todoId}}
+Accept: application/json
+
+### Update a Todo by id
+PATCH {{baseUrl}}/todos/{{todoId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Buy bread",
+  "status": "done"
+}

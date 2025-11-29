@@ -16,7 +16,7 @@ models:
         maxLength: 200
       status:
         type: string
-        enum: [open, in_progress, done]
+        enum: [open, done]
         default: open
       createdAt:
         type: date-time
@@ -55,7 +55,7 @@ validation:
         params: {min: 1, max: 200}
       - field: status
         rule: in
-        params: {values: [open, in_progress, done]}
+        params: {values: [open, done]}
   - model: Comment
     rules:
       - field: todoId
@@ -124,7 +124,7 @@ operations:
         type: object
         fields:
           title: {type: string}
-          status: {type: string, enum: [open, in_progress, done]}
+          status: {type: string, enum: [open, done]}
     responses:
       200: {model: Todo}
       404: {error: not_found}

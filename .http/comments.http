@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:8080
+@todoId = 9a72c29c-ab44-4f03-8e09-c356dbccefe7
+
+### List comments for a Todo
+GET {{baseUrl}}/todos/{{todoId}}/comments
+Accept: application/json
+
+### Add a comment to a Todo
+POST {{baseUrl}}/todos/{{todoId}}/comments
+Content-Type: application/json
+Accept: application/json
+
+{
+  "message": "This is a helpful comment."
+}

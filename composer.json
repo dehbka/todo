@@ -12,6 +12,7 @@
         "doctrine/orm": "^3.5",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.3",
+        "ramsey/uuid": "^4.9",
         "symfony/asset": "8.0.*",
         "symfony/asset-mapper": "8.0.*",
         "symfony/console": "8.0.*",
@@ -76,18 +77,20 @@
         "symfony/polyfill-php84": "*"
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd",
+      "importmap:install": "symfony-cmd"
     },
+    "post-install-cmd": [
+      "@auto-scripts"
+    ],
+    "post-update-cmd": [
+      "@auto-scripts"
+    ],
+    "cs:check": "php-cs-fixer fix --dry-run --diff",
+    "cs:fix": "php-cs-fixer fix"
+  },
     "conflict": {
         "symfony/symfony": "*"
     },
@@ -98,12 +101,13 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.4",
-        "symfony/browser-kit": "8.0.*",
-        "symfony/css-selector": "8.0.*",
-        "symfony/debug-bundle": "8.0.*",
-        "symfony/maker-bundle": "^1.0",
-        "symfony/stopwatch": "8.0.*",
-        "symfony/web-profiler-bundle": "8.0.*"
+      "phpunit/phpunit": "^12.4",
+      "symfony/browser-kit": "8.0.*",
+      "symfony/css-selector": "8.0.*",
+      "symfony/debug-bundle": "8.0.*",
+      "symfony/maker-bundle": "^1.0",
+      "symfony/stopwatch": "8.0.*",
+      "symfony/web-profiler-bundle": "8.0.*",
+      "friendsofphp/php-cs-fixer": "^3.91"
     }
-}
+  }

@@ -161,7 +161,7 @@ components:
   schemas:
     Status:
       type: string
-      enum: [open, in_progress, done]
+      enum: [open, done]
       description: Current state of the Todo
     Todo:
       type: object
