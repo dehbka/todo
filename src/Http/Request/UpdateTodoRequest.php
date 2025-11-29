@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class UpdateTodoRequest
 {
     public function __construct(
+        #[Assert\NotBlank(allowNull: true)]
         #[Assert\Length(max: 200)]
         public readonly ?string $title = null,
 

@@ -9,6 +9,7 @@ use App\Shared\NotFoundException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 #[AsEventListener(event: 'kernel.exception')]
@@ -17,6 +18,38 @@ final class ApiExceptionSubscriber
     public function __invoke(ExceptionEvent $event): void
     {
         $e = $event->getThrowable();
+
+        // Normalize 422 exceptions produced by MapRequestPayload auto-validation
+        if ($e instanceof UnprocessableEntityHttpException) {
+            $previous = $e->getPrevious();
+            if ($previous instanceof ValidationFailedException) {
+                $violations = [];
+                foreach ($previous->getViolations() as $violation) {
+                    $violations[] = [
+                        'propertyPath' => $violation->getPropertyPath(),
+                        'message' => (string) $violation->getMessage(),
+                        'code' => (string) $violation->getCode(),
+                    ];
+                }
+                $payload = [
+                    'code' => 'validation.failed',
+                    'message' => 'Validation failed',
+                    'violations' => $violations,
+                ];
+                $event->setResponse(new JsonResponse($payload, 422, ['Content-Type' => 'application/problem+json']));
+
+                return;
+            }
+
+            // Fallback when no violations collection is present
+            $payload = [
+                'code' => 'validation.failed',
+                'message' => 'Validation failed',
+            ];
+            $event->setResponse(new JsonResponse($payload, 422, ['Content-Type' => 'application/problem+json']));
+
+            return;
+        }
 
         if ($e instanceof ValidationFailedException) {
             $violations = [];

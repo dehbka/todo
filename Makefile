@@ -1,4 +1,4 @@
-.PHONY: up down migrate
+.PHONY: up down migrate sh test
 
 # Detect docker-compose (v1) or docker compose (v2)
 DC := $(shell command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo docker compose)
@@ -18,3 +18,7 @@ sh:
 # migrate - run doctrine migrations inside the PHP app container
 migrate:
 	$(DC) exec app php bin/console doctrine:migrations:migrate -n
+
+# test - run phpunit test suite
+test:
+	./vendor/bin/phpunit
